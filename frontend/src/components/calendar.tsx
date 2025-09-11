@@ -1,48 +1,19 @@
 import { motion } from "framer-motion";
 
-import { generateDays } from "../utils/utils";
+import { generateDays, getDaysIndex } from "../utils/utils";
+import type { TravelEvent } from "../definitions/definitions";
 
 // Generate hours (0–23)
-const hours = Array.from(
-  { length: 24 },
-  (_, i) => `${i === 0 ? 12 : i > 12 ? i - 12 : i} ${i < 12 ? "AM" : "PM"}`
-);
+const hours: string[] = [];
 
-const days = generateDays("2025-09-11", 7); // a week
+for (let i = 0; i < 24; i++) {
+  if (i > 0 && i <= 4) continue; // skip 1AM-4AM
+  hours.push(`${i === 0 ? 12 : i > 12 ? i - 12 : i} ${i < 12 ? "AM" : "PM"}`);
+}
 
-// Example events
-const events = [
-  {
-    id: 1,
-    title: "Hackathon",
-    day: "2025-09-12",
-    startHour: 0,
-    endHour: 6,
-  },
-  {
-    id: 2,
-    title: "Morning Run",
-    day: "2025-09-13",
-    startHour: 6,
-    endHour: 8,
-  },
-  {
-    id: 3,
-    title: "Team Meeting",
-    day: "2025-09-13",
-    startHour: 9,
-    endHour: 11,
-  },
-  {
-    id: 4,
-    title: "Dinner",
-    day: "2025-09-14",
-    startHour: 18,
-    endHour: 20,
-  },
-];
+const days = generateDays("2025-09-17", 7); // a week
 
-export default function Calendar() {
+export default function Calendar({ events }: { events: Array<TravelEvent> }) {
   const rowHeight = 60; // px height per hour slot
 
   return (
@@ -84,7 +55,7 @@ export default function Calendar() {
 
         {/* Events layer */}
         {events.map((event) => {
-          const dayIndex = days.indexOf(event.day);
+          const dayIndex = getDaysIndex(event.day, days);
           if (dayIndex === -1) return null;
 
           const top = event.startHour * rowHeight;
