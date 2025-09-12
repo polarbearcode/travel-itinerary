@@ -200,6 +200,14 @@ function App() {
       startHour: 4,
       endHour: 15,
     },
+
+    {
+      id: 29,
+      title: "Movie",
+      day: "2025-09-19",
+      startHour: 18,
+      endHour: 23,
+    },
   ];
   return (
     <>
